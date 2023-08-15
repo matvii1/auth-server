@@ -8,10 +8,19 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String?   @unique
-  name      String?
-  password  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  email          String   @unique
+  name           String
+  activated      Boolean  @default(false)
+  activationLink String @unique
+  password       String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  Token          Token[]
+}
+
+model Token {
+  refreshToken String @unique
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
 }

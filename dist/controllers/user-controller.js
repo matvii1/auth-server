@@ -12,13 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const controllers_1 = require("$/dist/controllers");
-const router = express_1.default.Router();
-router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.post('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.get('/refresh', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.get('/activate/:link', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.get('/users', controllers_1.userController.getAll);
-exports.default = router;
+const dotenv_1 = __importDefault(require("dotenv"));
+const services_1 = require("../services");
+dotenv_1.default.config();
+class UserController {
+    getAll(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const users = yield services_1.userService.getAllUsers();
+            res.json(users);
+        });
+    }
+}
+exports.default = new UserController();

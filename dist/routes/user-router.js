@@ -13,12 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const controllers_1 = require("$/dist/controllers");
+const controllers_1 = require("../controllers");
+const helpers_1 = require("../helpers");
+const middlewares_1 = require("../middlewares");
+const prisma_1 = require("../prisma");
 const router = express_1.default.Router();
-router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.post('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.get('/refresh', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.get('/activate/:link', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
-router.get('/users', controllers_1.userController.getAll);
+router.get('/users', middlewares_1.authMiddleware, (0, helpers_1.catchError)(controllers_1.userController.getAll));
+// TODO: remove. THIS IS FOR DEV
+router.delete('/delete', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield prisma_1.prisma.user.deleteMany();
+    res.json({
+        deleted: true,
+    });
+}));
 exports.default = router;

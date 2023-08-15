@@ -1,25 +1,28 @@
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
-import authRouter from './routes/auth.js'
+import { errorMiddleware } from './middlewares'
+import { mainRouter } from './routes'
 
 dotenv.config()
 
 const PORT = process.env.PORT || 3000
 
 const app = express()
-app.use(cors())
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.CLIENT_URL,
+  })
+)
+
 app.use(express.json())
-app.use(authRouter)
+app.use(cookieParser())
+app.use('/api', mainRouter)
 
-async function start() {
-  try {
-    app.listen(PORT, () => {
-      console.log(`http://localhost:${PORT}`)
-    })
-  } catch (error) {
-    console.log(error)
-  }
-}
+app.use(errorMiddleware)
 
-start()
+app.listen(PORT, () => {
+  console.log(`http://localhost:${PORT}`)
+})

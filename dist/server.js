@@ -11,6 +11,7 @@ const middlewares_1 = require("./middlewares");
 const routes_1 = require("./routes");
 dotenv_1.default.config();
 const PORT = process.env.PORT || 3000;
+console.log('here', process.env.CLIENT_URL);
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     credentials: true,
